@@ -1,0 +1,42 @@
+﻿@using Library.Models.Models
+@model IEnumerable<Book>
+
+    <div class="container text-center py-4">
+    <h1>Nossos Livros</h1>
+    </div>
+<div class="row pb-3">
+        @foreach (var product in Model)
+        {
+            <div class=" col-lg-3 col-sm-6">
+                <div class="row p-2">
+                    <div class="col-12 p-1">
+                        <div class="card border-0 p-3">
+                            @if (product.BookImages != null && product.BookImages.Count() > 0)
+                            {
+                                <img src="@product.BookImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" alt="book-img" />
+                            }
+                            else
+                            {
+                                <img src="https://placehold.co/500x600/png" class="card-img-top rounded" alt="book-img" />
+                            }
+                            <div class="card-body pb-0">
+                                <div class="ps-1">
+                                    <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@product.Title</p>
+                                    <p class="card-title text-warning text-center">by <b>@product.Author</b></p>
+                                </div>
+                                <div class="ps-1">
+                                    <p class="text-dark text-opacity-75 text-center"><span class="">@product.Price.ToString("c")</span></p>
+                                </div>
+                            </div>
+                            <div>
+                                <a asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-productId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        }
+    </div>
+    
+</div>

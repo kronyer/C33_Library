@@ -1,0 +1,146 @@
+﻿@using Library.Models.Models
+@model BookVM
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card border-3 mt-4 col-12">
+            <div class="card-header bg-light ms-0 py-3">
+                <div class="row">
+                    <div class="col text-center">
+                        <h2 class="text-primary">@(Model.Book.Id != 0 ? "Update" : "Create") Product</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <form method="post" class="row" enctype="multipart/form-data">
+                    <input asp-for="Book.Id" hidden />
+                    <div class="col-9">
+                        <div class="border p-3 mt-4">
+                            <div class="mb-3 form-floating">
+                                <input asp-for="Book.Title" class="form-control" />
+                                <label asp-for="Book.Title"></label>
+                                <span asp-validation-for="Book.Title" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <textarea asp-for=Book.Description class="form-control"></textarea>
+                                <label asp-for="Book.Description"></label>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <input asp-for=Book.ISBN class="form-control" />
+                                <label asp-for="Book.ISBN"></label>
+                                <span asp-validation-for="Book.ISBN" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <input asp-for=Book.Author class="form-control" />
+                                <label asp-for="Book.Author"></label>
+                                <span asp-validation-for="Book.Author" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <input type="file" name="files" class="form-control" multiple />
+                                <label asp-for="Book.BookImages"></label>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <input asp-for=Book.Price class="form-control" />
+                                <label class="px-4 pb-5" asp-for="Book.Price"></label>
+                                <span asp-validation-for="Book.Price" class="text-danger"></span>
+                                <div class="mb-3 form-floating">
+                                    <select id="categoryDropdown" asp-for=Book.CategoryId asp-items="@Model.CategoriesList" class="form-select">
+                                        <option disabled selected>--Select Category--</option>
+                                        <option value="createCategory">
+                                            &#43; Create a Category
+                                        </option>
+                                    </select>
+                                    <label asp-for="Book.CategoryId"></label>
+                                    <span asp-validation-for="Book.CategoryId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        @if (Model.Book.BookImages != null)
+                        {
+                            foreach (var image in Model.Book.BookImages)
+                            {
+                                <div class="border p-1 m-2 text-center">
+                                    <img src="@image.ImageUrl" width="100%" style="border-radius:5px; border:1px solid white;" />
+                                    <a asp-action="DeleteImage" class="btn btn-danger" asp-route-imageId="@image.Id"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-primary" style="width:150px">@(Model.Book.Id != 0 ? "Update" : "Create")</button>
+                            <a asp-controller="Book" asp-action="Index" class="btn btn-secondary" style="width:150px">Back</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for Creating a New Category -->
+<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCategoryModalLabel">Create a New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createCategoryForm">
+                    <div class="mb-3">
+                        <label for="newCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="newCategoryName" name="newCategoryName" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="createCategoryButton">Create Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts  {
+    <script>
+        document.getElementById('categoryDropdown').addEventListener('change', function () {
+            if (this.value === 'createCategory') {
+                var createCategoryModal = new bootstrap.Modal(document.getElementById('createCategoryModal'));
+                createCategoryModal.show();
+                // Resetar o dropdown para a opção padrão
+                this.value = ''; // ou null, dependendo do tipo de valor do dropdown
+            }
+        });
+
+        document.getElementById('createCategoryButton').addEventListener('click', function () {
+            var newCategoryName = document.getElementById('newCategoryName').value;
+
+            fetch('/Admin/Category/CreateAjax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify(newCategoryName)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.categoryId && data.categoryName) {
+                        var newOption = new Option(data.categoryName, data.categoryId);
+                        document.getElementById('categoryDropdown').add(newOption, document.getElementById('categoryDropdown').options[1]);
+                        document.getElementById('categoryDropdown').value = data.categoryId;
+                    }
+                    var createCategoryModal = bootstrap.Modal.getInstance(document.getElementById('createCategoryModal'));
+                    createCategoryModal.hide();
+                });
+
+            return false; // Evita a submissão do formulário principal
+        });
+    </script>
+    @{
+        //está no scrips pq é só script
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

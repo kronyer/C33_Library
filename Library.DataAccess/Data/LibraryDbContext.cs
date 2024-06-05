@@ -1,4 +1,5 @@
 ﻿using Library.Models.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.DataAccess.Data
 {
-    public class LibraryDbContext : DbContext
+    public class LibraryDbContext : IdentityDbContext
     {
         public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options)
         {
@@ -18,5 +19,7 @@ namespace Library.DataAccess.Data
         public DbSet<BookCategory> BookCategories { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostCategory> PostCategories { get; set; }
+        public DbSet<BookImage> BookImages { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

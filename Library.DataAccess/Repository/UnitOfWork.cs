@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace Library.DataAccess.Repository
 {
-    internal class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly LibraryDbContext _db;
         public IPostRepository Post { get; private set; }
         public IPostCategoryRepository PostCategory { get; private set; }
         public IBookRepository Book { get; private set; }
         public IBookCategoryRepository BookCategory { get; private set; }
+        public IBookImageRepository BookImage { get; private set; }
         public UnitOfWork(LibraryDbContext db)
         {
             _db = db;
@@ -22,6 +23,7 @@ namespace Library.DataAccess.Repository
             PostCategory = new PostCategoryRepository(_db);
             Book = new BookRepository(_db);
             BookCategory = new BookCategoryRepository(_db);
+            BookImage = new BookImageRepository(_db);
         }
 
        

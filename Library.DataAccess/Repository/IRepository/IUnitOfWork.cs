@@ -12,6 +12,7 @@ namespace Library.DataAccess.Repository.IRepository
         IPostRepository Post{ get; }
         IBookCategoryRepository BookCategory { get; }
         IBookRepository Book { get; }
+        IBookImageRepository BookImage { get; }
 
         void Save();
     }

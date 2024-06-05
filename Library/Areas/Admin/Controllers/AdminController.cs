@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Controllers
+namespace Library.Areas.Admin.Controllers
 {
-    public class BookController : Controller
+    public class AdminController : Controller
     {
         public IActionResult Index()
         {
