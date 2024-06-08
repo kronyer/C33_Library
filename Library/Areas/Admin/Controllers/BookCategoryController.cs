@@ -1,16 +1,19 @@
 ﻿using Library.DataAccess.Repository.IRepository;
 using Library.Models.Models;
+using Library.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+    [Authorize(Roles = SD.Role_Admin)]
+    public class BookCategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(IUnitOfWork unitOfWork)
+        public BookCategoryController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -18,6 +21,36 @@ namespace Library.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Upsert(int? id)
+        {
+            if (id is null || id == 0)
+            {
+                //para create retorna num novo
+                return View(new BookCategory());
+            }
+            else
+            {
+                //para update retorna os campos populadors
+                BookCategory bookCategory = _unitOfWork.BookCategory.Get(x => x.Id == id);
+                return View(bookCategory);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Upsert(BookCategory bookCategory)
+        {
+            if (bookCategory.Id == 0)
+            {
+                _unitOfWork.BookCategory.Add(bookCategory);
+            }
+            else
+            {
+                _unitOfWork.BookCategory.Update(bookCategory);
+            }
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

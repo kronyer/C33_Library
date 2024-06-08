@@ -1,0 +1,145 @@
+﻿@using Library.Models.Models.ViewModels
+@model PostVM
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card border-3 mt-4 col-12">
+            <div class="card-header bg-light ms-0 py-3">
+                <div class="row">
+                    <div class="col text-center">
+                        <h2 class="text-primary">@(Model.Post.Id != 0 ? "Update" : "Create") Category</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <form method="post" class="row">
+                    <input asp-for="@Model.Post.Id" hidden />
+                    <div class="col-9">
+                        <div class="border p-3 mt-4">
+                            <div class="mb-3 form-floating">
+                                <input asp-for="@Model.Post.Title" class="form-control" />
+                                <label asp-for="@Model.Post.Title"></label>
+                                <span asp-validation-for="@Model.Post.Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <div id="editor" style="height: 200px;">
+                                
+                            </div>
+                            <textarea id="quill-textarea" name="Post.Text" asp-for="Post.Text" style="display:none;"></textarea>
+                            
+                            <span asp-validation-for="Post.Text" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-floating">
+                            <select id="categoryDropdown" asp-for=Post.CategoryId asp-items="@Model.CategoriesList" class="form-select">
+                                <option disabled selected>--Select Category--</option>
+                                <option value="createCategory">
+                                    &#43; Create a Category
+                                </option>
+                            </select>
+                            <label asp-for="Post.CategoryId"></label>
+                            <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
+                        </div>
+                        
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-primary" style="width:150px">@(Model.Post.Id != 0 ? "Update" : "Create")</button>
+                            <a asp-area=Admin asp-controller="Category" asp-action="Index" class="btn btn-secondary" style="width:150px">Back</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for Creating a New Category -->
+<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCategoryModalLabel">Create a New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createCategoryForm">
+                    <div class="mb-3">
+                        <label for="newCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="newCategoryName" name="newCategoryName" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="createCategoryButton">Create Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.getElementById('categoryDropdown').addEventListener('change', function () {
+            if (this.value === 'createCategory') {
+                var createCategoryModal = new bootstrap.Modal(document.getElementById('createCategoryModal'));
+                createCategoryModal.show();
+                // Resetar o dropdown para a opção padrão
+                this.value = ''; // ou null, dependendo do tipo de valor do dropdown
+            }
+        });
+
+        document.getElementById('createCategoryButton').addEventListener('click', function () {
+            var newCategoryName = document.getElementById('newCategoryName').value;
+
+            fetch('/Admin/PostCategory/CreateAjax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify(newCategoryName)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.categoryId && data.categoryName) {
+                        var newOption = new Option(data.categoryName, data.categoryId);
+                        document.getElementById('categoryDropdown').add(newOption, document.getElementById('categoryDropdown').options[1]);
+                        document.getElementById('categoryDropdown').value = data.categoryId;
+                    }
+                    var createCategoryModal = bootstrap.Modal.getInstance(document.getElementById('createCategoryModal'));
+                    createCategoryModal.hide();
+                });
+
+            return false; // Evita a submissão do formulário principal
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Inicialize o Quill
+            var quill = new Quill('#editor', {
+                theme: 'snow'
+            });
+
+            // Sincronize o conteúdo do Quill com o textarea oculto
+            var textarea = document.getElementById('quill-textarea');
+
+            quill.on('text-change', function () {
+                textarea.value = quill.root.innerHTML;
+            });
+
+            // Preencher o editor Quill com o conteúdo existente no textarea
+            if (textarea.value) {
+                quill.root.innerHTML = textarea.value;
+            }
+        });
+    </script>
+    @{
+        //está no scrips pq é só script
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

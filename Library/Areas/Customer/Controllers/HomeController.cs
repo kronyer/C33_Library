@@ -24,7 +24,7 @@ namespace Library.Areas.Customer.Controllers
             return View(books);
         }
 
-        public IActionResult Privacy()
+        public IActionResult About()
         {
             return View();
         }

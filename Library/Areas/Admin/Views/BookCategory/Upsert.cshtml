@@ -1,0 +1,49 @@
+﻿@using Library.Models.Models
+@model BookCategory
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card border-3 mt-4 col-12">
+            <div class="card-header bg-light ms-0 py-3">
+                <div class="row">
+                    <div class="col text-center">
+                        <h2 class="text-primary">@(Model.Id != 0 ? "Update" : "Create") Category</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <form method="post" class="row">
+                    <input asp-for="@Model.Id" hidden />
+                    <div class="col-9">
+                        <div class="border p-3 mt-4">
+                            <div class="mb-3 form-floating">
+                                <input asp-for="@Model.Name" class="form-control" />
+                                <label asp-for="@Model.Name"></label>
+                                <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-primary" style="width:150px">@(Model.Id != 0 ? "Update" : "Create")</button>
+                            <a asp-area=Admin asp-controller="Category" asp-action="Index" class="btn btn-secondary" style="width:150px">Back</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    @{
+        //está no scrips pq é só script
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

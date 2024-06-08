@@ -1,10 +1,14 @@
 ﻿using Library.DataAccess.Repository.IRepository;
 using Library.Models.Models;
+using Library.Models.Models.ViewModels;
+using Library.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class BookController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +25,8 @@ namespace Library.Areas.Admin.Controllers
             List<Book> books = _unitOfWork.Book.GetAll(includeProperties: "Category").ToList();
             return View(books);
         }
+
+       
 
         #region Upsert
         public IActionResult Upsert(int? id)

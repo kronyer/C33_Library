@@ -1,4 +1,5 @@
-﻿@using Library.Models.Models
+﻿@using Library.Models.Models.ViewModels
+
 @model BookVM
 
 <div class="container">
@@ -116,7 +117,7 @@
         document.getElementById('createCategoryButton').addEventListener('click', function () {
             var newCategoryName = document.getElementById('newCategoryName').value;
 
-            fetch('/Admin/Category/CreateAjax', {
+            fetch('/Admin/BookCategory/CreateAjax', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

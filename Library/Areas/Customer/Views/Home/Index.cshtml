@@ -28,7 +28,7 @@
                     <div class="card border-0 p-3">
                         @if (product.BookImages != null && product.BookImages.Count() > 0)
                         {
-                            <img src="@product.BookImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" alt="book-img" />
+                            <img src="@product.BookImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" alt="book-img" style="height:400px;" />
                         }
                         else
                         {
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div>
-                            <a asp-action="Details" asp-controller="Book" asp-area="Customer" asp-route-productId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
+                            <a asp-action="Details" asp-controller="Book" asp-area="Customer" asp-route-bookId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
                         </div>
                     </div>
                 </div>

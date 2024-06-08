@@ -1,6 +1,31 @@
 ﻿@using Library.Models.Models
 @model IEnumerable<Book>
 
+<style>
+    .fixed-card {
+        width: 100%; /* Defina a largura fixa desejada */
+        max-width: 300px; /* Defina a largura máxima se necessário */
+        height: 500px; /* Defina a altura fixa desejada */
+        display: flex;
+        flex-direction: column;
+    }
+
+        .fixed-card img {
+            object-fit: cover; /* Para cobrir toda a área sem distorcer a imagem */
+            height: 60%; /* Ajuste conforme necessário */
+            width: 100%;
+        }
+
+        .fixed-card .card-body {
+            flex: 1; /* Faz com que o card-body ocupe o espaço restante */
+            overflow: hidden;
+        }
+
+        .fixed-card .btn {
+            margin-top: auto; /* Move o botão para o fundo do card */
+        }
+</style>
+
     <div class="container text-center py-4">
     <h1>Nossos Livros</h1>
     </div>
@@ -13,7 +38,7 @@
                         <div class="card border-0 p-3">
                             @if (product.BookImages != null && product.BookImages.Count() > 0)
                             {
-                                <img src="@product.BookImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" alt="book-img" />
+                                <img src="@product.BookImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" alt="book-img" style="height:400px;" />
                             }
                             else
                             {
@@ -29,7 +54,7 @@
                                 </div>
                             </div>
                             <div>
-                                <a asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-productId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
+                                <a asp-action="Details" asp-controller="Book" asp-area="Customer" asp-route-bookId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
                             </div>
                         </div>
                     </div>
@@ -39,4 +64,3 @@
         }
     </div>
     
-</div>

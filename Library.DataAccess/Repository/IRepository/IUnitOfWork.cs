@@ -13,6 +13,10 @@ namespace Library.DataAccess.Repository.IRepository
         IBookCategoryRepository BookCategory { get; }
         IBookRepository Book { get; }
         IBookImageRepository BookImage { get; }
+        IOrderHeaderRepository OrderHeader { get; }
+        IShoppingCartRepository ShoppingCart { get; }
+        IOrderDetailRepository OrderDetail{ get; }
+        IApplicationUserRepository ApplicationUser{ get; }
 
         void Save();
     }
