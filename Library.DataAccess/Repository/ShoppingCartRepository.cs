@@ -2,20 +2,19 @@
 using Library.DataAccess.Repository.IRepository;
 using Library.Models.Models;
 
-namespace Library.DataAccess.Repository
+namespace Library.DataAccess.Repository;
+
+public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
 {
-    public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
+    private LibraryDbContext _db;
+
+    public ShoppingCartRepository(LibraryDbContext db) : base(db)
     {
-        private LibraryDbContext _db;
+        _db = db;
+    }
 
-        public ShoppingCartRepository(LibraryDbContext db) : base(db)
-        {
-            _db = db;
-        }
-
-        public void Update(ShoppingCart shoppingCart)
-        {
-            _db.ShoppingCarts.Update(shoppingCart);
-        }
+    public void Update(ShoppingCart shoppingCart)
+    {
+        _db.ShoppingCarts.Update(shoppingCart);
     }
 }

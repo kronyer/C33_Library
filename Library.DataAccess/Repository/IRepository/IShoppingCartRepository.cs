@@ -1,10 +1,8 @@
-﻿using Library.DataAccess.Repository.IRepository;
-using Library.Models.Models;
+﻿using Library.Models.Models;
 
-namespace Library.DataAccess.Repository.IRepository
+namespace Library.DataAccess.Repository.IRepository;
+
+public interface IShoppingCartRepository : IRepository<ShoppingCart>
 {
-    public interface IShoppingCartRepository : IRepository<ShoppingCart>
-    {
-        void Update(ShoppingCart shoppingCart);
-    }
+    void Update(ShoppingCart shoppingCart);
 }

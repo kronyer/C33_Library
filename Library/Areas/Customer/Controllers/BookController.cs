@@ -62,11 +62,7 @@ namespace Library.Areas.Customer.Controllers
                 HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(x => x.ApplicationUserId == userId).Count());
             }
             TempData["success"] = "Updated!";
-
-
-
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

@@ -1,17 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Library.Services
+namespace Library.Services;
+
+public class EmailSender : IEmailSender
 {
-    public class EmailSender : IEmailSender
+    public Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
-        {
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

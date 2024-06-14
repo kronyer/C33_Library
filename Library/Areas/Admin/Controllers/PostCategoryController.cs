@@ -2,40 +2,39 @@
 using Library.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Areas.Admin.Controllers
+namespace Library.Areas.Admin.Controllers;
+
+[Area("Admin")]
+public class PostCategoryController : Controller
 {
-    [Area("Admin")]
-    public class PostCategoryController : Controller
+    private readonly IUnitOfWork _unitOfWork;
+
+    public PostCategoryController(IUnitOfWork unitOfWork)
     {
-        private readonly IUnitOfWork _unitOfWork;
+        _unitOfWork = unitOfWork;
+    }
 
-        public PostCategoryController(IUnitOfWork unitOfWork)
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult CreateAjax([FromBody] string categoryName)
+    {
+        if (string.IsNullOrWhiteSpace(categoryName))
         {
-            _unitOfWork = unitOfWork;
+            return BadRequest("Invalid category name");
         }
 
-        public IActionResult Index()
+        var newCategory = new PostCategory
         {
-            return View();
-        }
+            Name = categoryName
+        };
 
-        [HttpPost]
-        public IActionResult CreateAjax([FromBody] string categoryName)
-        {
-            if (string.IsNullOrWhiteSpace(categoryName))
-            {
-                return BadRequest("Invalid category name");
-            }
+        _unitOfWork.PostCategory.Add(newCategory);
+        _unitOfWork.Save();
 
-            var newCategory = new PostCategory
-            {
-                Name = categoryName
-            };
-
-            _unitOfWork.PostCategory.Add(newCategory);
-            _unitOfWork.Save();
-
-            return Ok(new { categoryId = newCategory.Id, categoryName = newCategory.Name });
-        }
+        return Ok(new { categoryId = newCategory.Id, categoryName = newCategory.Name });
     }
 }

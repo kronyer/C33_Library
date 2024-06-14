@@ -1,0 +1,91 @@
+﻿@using Library.Models.Models
+@using Library.Services
+@using Microsoft.AspNetCore.Html
+@using HtmlAgilityPack
+@using System.Text
+@model List<Post>
+
+@functions {
+    public string TruncateHtml(string html, int maxLength)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        var truncatedContent = TruncateNode(doc.DocumentNode, maxLength);
+        return truncatedContent;
+    }
+
+    private string TruncateNode(HtmlNode node, int maxLength)
+    {
+        if (maxLength <= 0)
+        {
+            return string.Empty;
+        }
+
+        if (node.NodeType == HtmlNodeType.Text)
+        {
+            var text = node.InnerText;
+            if (text.Length > maxLength)
+            {
+                return text.Substring(0, maxLength) + "...";
+            }
+            return text;
+        }
+
+        var result = new StringBuilder();
+        foreach (var child in node.ChildNodes)
+        {
+            var childHtml = TruncateNode(child, maxLength);
+            maxLength -= HtmlEntity.DeEntitize(childHtml).Length;
+            result.Append(childHtml);
+
+            if (maxLength <= 0)
+            {
+                break;
+            }
+        }
+
+        if (node.NodeType == HtmlNodeType.Element)
+        {
+            var tag = node.Name;
+            return $"<{tag}>{result}</{tag}>";
+        }
+
+        return result.ToString();
+    }
+}
+
+@{
+    if (User.IsInRole(SD.Role_Admin))
+    {
+        <div class="container justify-content-end text-end">
+            <a asp-controller="Post" asp-area="Admin" asp-action="Upsert" class="btn btn-primary">New post</a>
+        </div>
+    }
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-12">
+        <h1 class="my-3">Posts</h1>
+        @foreach (var post in Model)
+        {
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="~/c53ef2_59f712ce80c94c1bbe9b8ac56b15b97d~mv2.webp" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-10">
+                        <div class="card-body">
+                            <h5 class="card-title">@post.Title</h5>
+                            @{
+                                var truncatedHtml = TruncateHtml(post.Text, 255); // Defina o número máximo de caracteres
+                                HtmlString truncatedText = new HtmlString(truncatedHtml);
+                            }
+                            <p class="card-text">@truncatedText</p>
+                            <p class="card-text"><small class="text-body-secondary">Last updated: @post.LastEdited</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

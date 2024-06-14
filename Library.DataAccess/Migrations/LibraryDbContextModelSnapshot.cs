@@ -59,7 +59,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("Library.Models.Models.BookCategory", b =>
@@ -79,7 +79,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookCategories");
+                    b.ToTable("BookCategories", (string)null);
                 });
 
             modelBuilder.Entity("Library.Models.Models.BookImage", b =>
@@ -101,7 +101,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("BookImages");
+                    b.ToTable("BookImages", (string)null);
                 });
 
             modelBuilder.Entity("Library.Models.Models.OrderDetail", b =>
@@ -130,7 +130,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasIndex("OrderHeaderId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Library.Models.Models.OrderHeader", b =>
@@ -210,7 +210,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("OrderHeaders");
+                    b.ToTable("OrderHeaders", (string)null);
                 });
 
             modelBuilder.Entity("Library.Models.Models.Post", b =>
@@ -242,7 +242,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Library.Models.Models.PostCategory", b =>
@@ -259,7 +259,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PostCategories");
+                    b.ToTable("PostCategories", (string)null);
                 });
 
             modelBuilder.Entity("Library.Models.Models.ShoppingCart", b =>
@@ -286,7 +286,7 @@ namespace Library.DataAccess.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("ShoppingCarts");
+                    b.ToTable("ShoppingCarts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

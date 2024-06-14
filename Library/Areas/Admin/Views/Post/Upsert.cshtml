@@ -7,7 +7,7 @@
             <div class="card-header bg-light ms-0 py-3">
                 <div class="row">
                     <div class="col text-center">
-                        <h2 class="text-primary">@(Model.Post.Id != 0 ? "Update" : "Create") Category</h2>
+                        <h2 class="text-primary">@(Model.Post.Id != 0 ? "Update" : "Create") Post</h2>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <div class="row">
                         <div class="col text-center">
                             <button type="submit" class="btn btn-primary" style="width:150px">@(Model.Post.Id != 0 ? "Update" : "Create")</button>
-                            <a asp-area=Admin asp-controller="Category" asp-action="Index" class="btn btn-secondary" style="width:150px">Back</a>
+                            <a asp-area=Admin asp-controller="Post" asp-action="PostList" class="btn btn-secondary" style="width:150px">Back</a>
                         </div>
                     </div>
                 </form>
