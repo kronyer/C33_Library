@@ -23,9 +23,12 @@
                                 <span asp-validation-for="Book.Title" class="text-danger"></span>
                             </div>
                             <div class="mb-3 form-floating">
-                                <textarea asp-for=Book.Description class="form-control"></textarea>
-                                <label asp-for="Book.Description"></label>
+                                <div id="editor" style="height: 200px;">
+                                </div>
+                                <textarea id="quill-textarea" name="Book.Description" asp-for=Book.Description style="display:none;"></textarea>
+                                <span asp-validation-for="Book.Description" class="text-danger"></span>
                             </div>
+                            
                             <div class="mb-3 form-floating">
                                 <input asp-for=Book.ISBN class="form-control" />
                                 <label asp-for="Book.ISBN"></label>
@@ -139,9 +142,31 @@
             return false; // Evita a submissão do formulário principal
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Inicialize o Quill
+            var quill = new Quill('#editor', {
+                theme: 'snow'
+            });
+
+            // Sincronize o conteúdo do Quill com o textarea oculto
+            var textarea = document.getElementById('quill-textarea');
+
+            quill.on('text-change', function () {
+                textarea.value = quill.root.innerHTML;
+            });
+
+            // Preencher o editor Quill com o conteúdo existente no textarea
+            if (textarea.value) {
+                quill.root.innerHTML = textarea.value;
+            }
+        });
+    </script>
     @{
         //está no scrips pq é só script
         <partial name="_ValidationScriptsPartial" />
     }
 }
+
 

@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Library.Services
+@using Microsoft.AspNetCore.Identity
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
@@ -13,15 +14,23 @@
             <ul class="dropdown-menu">
                 <li><a id="manage" class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Minha Conta</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a asp-for="Index" asp-controller="Order" asp-area="Admin" class="dropdown-item">Meus Pedidos</a></li>
+                <li><a asp-action="Index" asp-controller="Order" asp-area="Admin" class="dropdown-item">Meus Pedidos</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <form id="logoutForm" class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                         <button id="logout" type="submit" class="dropdown-item text-dark">Logout</button>
                     </form>
                 </li>
+                <li><hr class="dropdown-divider"></li>
+                @if (User.IsInRole(SD.Role_Admin))
+                {
+                <li>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin</a>
+                    </li>
+                }
+
             </ul>
-        </li>
+        </li>                        
 }
 else
 {
